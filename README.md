@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./distro/image.jpg">
+<img src="https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/image.jpg">
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/MADE%20IN-BANGLADESH-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge">
