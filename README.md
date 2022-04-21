@@ -1,3 +1,4 @@
+page-title base-title="zacharytamas" page-title="modded-ubuntu"></page-title>
 <p align="center">
 <img src="https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/image.jpg">
 </p>
