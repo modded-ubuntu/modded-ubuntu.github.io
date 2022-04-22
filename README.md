@@ -1,6 +1,3 @@
-'''
-titile: modded-ubuntu
-'''
 <p align="center">
 <img src="https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/image.jpg">
 </p>
