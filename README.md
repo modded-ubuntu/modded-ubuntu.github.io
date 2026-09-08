@@ -68,7 +68,8 @@
 
 ### Video Tutorial : 
 
-[![Watch the Tutorial](./distro/image1.jpg)](https://mega.nz/embed/QvIC1TLQ#3z27MRNPwANAg6JTtx1Ei8kDouOZsZgk00bg4TsJMNQ!1m)
+[![Watch the video](https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/refs/heads/master/distro/image.jpg)](https://mega.nz/embed/QvIC1TLQ#3z27MRNPwANAg6JTtx1Ei8kDouOZsZgk00bg4TsJMNQ)
+
 
 #
 ### Click to see the [Changelog](https://github.com/modded-ubuntu/modded-ubuntu/blob/master/CHANGELOG.md)
