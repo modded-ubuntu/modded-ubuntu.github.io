@@ -1,9 +1,9 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/master/distro/image.jpg">
+<img src="./distro/image.jpg">
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/MADE%20IN-BANGLADESH-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge">
-<img src="https://img.shields.io/badge/Version-1.0-blue?style=for-the-badge">
+<img src="https://img.shields.io/badge/Version-2.0-blue?style=for-the-badge">
 </p>
 <p align="center">
 <img src="https://img.shields.io/badge/Written%20In-Bash-darkgreen?style=flat-square">
@@ -18,34 +18,31 @@
 
 - Fixed Audio Output
 - Lightweight {Requires at least 4GB Storage}
-- Katoolin3 tool for installing kali tools
 - 2 Browsers (Chromium & Mozilla Firefox)
 - Supports Bangla Fonts
-- VLC Media Player
-- Visual Studio Code
+- VLC Media Player and MPV media player
+- Visual Studio Code (buggy on arm )
+- Sublime Text Editor (only for arm64/aarch64)
 - Easy for Beginners
+- Comes with some cool themes.
 
 ### Installation
+- Firstly install [Termux](https://termux.com) apk from [HERE](https://f-droid.org/repo/com.termux_118.apk)
+- Secondly Clone the Repository & Run the setup File
 
-- First Clone the Repository & Run the setup File
-
-  - `pkg update -y && pkg upgrade -y`
+  - `yes | pkg up`
   - `pkg install git wget -y`
-  - `git clone git://github.com/modded-ubuntu/modded-ubuntu.git`
+  - `git clone --depth=1 https://github.com/modded-ubuntu/modded-ubuntu.git`
   - `cd modded-ubuntu`
   - `bash setup.sh`
 
-- Then Restart your Termux & Type the following commands
-
-  - `ubuntu`
-  - `bash user.sh`
 
 - Type your ubuntu root username. Must be lowercase & no space included.
 
-- Then Again Restart your Termux & Type the following commands
+- Then  Restart your Termux & Type the following commands
 
-  - `ubuntu`
-  - `bash gui.sh`
+   - `ubuntu`
+   - `sudo bash gui.sh`
 
 - **You have to note your VNC password !!**
 
@@ -69,6 +66,14 @@
 
 - **Type `bash remove.sh` to remove Ubuntu Modded Os**
 
+### Video Tutorial : 
+
+[![Watch the Tutorial](./distro/image1.jpg)](https://mega.nz/embed/QvIC1TLQ#3z27MRNPwANAg6JTtx1Ei8kDouOZsZgk00bg4TsJMNQ!1m)
+
+#
+### Click to see the [Changelog](./CHANGELOG.md)
+Licensed under [Apache License](./LICENSE)
+#
 
 ### Credits : 
 
@@ -82,12 +87,12 @@ Termux Proot Distro - https://github.com/termux/proot-distro
 
 ### Maintainers
 
-- **Mustakim Ahmed** (https://github.com/BDhackers009)
-- **Tahmid Rayat** (https://github.com/htr-tech)
+- [**Mustakim Ahmed**](https://github.com/BDhackers009)
+- [**Tahmid Rayat**](https://github.com/htr-tech)
+- [**0xBaryonyx**](https://github.com/Mahfuz-THBD)
 
+## Contributers
 
-### OUR TEAM : **TERMUX HACKER BD**
-- **JOIN OUR GROUP** - [**CLICK HERE**](https://www.facebook.com/groups/242589267650518)
-
+- [**Superchavo**](https://github.com/Superchavo)
 
 ### If you like our work then dont forget to give a Star :)
