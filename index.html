@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Modded Ubuntu for Termux | Full Linux Desktop on Android</title>
+  <meta name="description"
+    content="Run a customized, modern Ubuntu Desktop (XFCE4) on your Android phone using Termux without root. Includes audio fixes, modern browsers, VS Code and sleek themes." />
+  <meta name="theme-color" content="#0a0d12" />
+  <meta name="theme-color" content="#0a0d12" media="(prefers-color-scheme: dark)" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Modded Ubuntu for Termux" />
+  <meta property="og:description"
+    content="A complete, polished Ubuntu 26.04 GUI desktop environment for Android with fixed audio, browsers and zero root required." />
+  <meta property="og:image" content="./distro/image.jpg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0d12;
+      --bg-card: #121720;
+      --bg-card-hover: #171e2b;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(233, 84, 32, 0.4);
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --text-sub: #c9d1d9;
+      --primary: #e95420;
+      --primary-glow: rgba(233, 84, 32, 0.25);
+      --accent: #10b981;
+      --accent-blue: #38bdf8;
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --radius: 12px;
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(233, 84, 32, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 65%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--primary);
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(10, 13, 18, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-left: env(safe-area-inset-left, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--text-main);
+      min-width: 0;
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .brand-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .brand-badge {
+      background: rgba(233, 84, 32, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(233, 84, 32, 0.3);
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .mobile-quick-nav {
+      display: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 14px var(--primary-glow);
+      border: 1px solid transparent;
+    }
+
+    .btn-primary:hover {
+      background: #f06430;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(233, 84, 32, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+
+    .pill-announcement {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff 40%, #c9d1d9 70%, #e95420 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .install-box {
+      max-width: 720px;
+      margin: 0 auto 50px;
+      background: #06090d;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .install-code {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      white-space: nowrap;
+      text-align: left;
+      scrollbar-width: none;
+    }
+
+    .install-code::-webkit-scrollbar {
+      display: none;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .preview-window {
+      max-width: 980px;
+      margin: 0 auto;
+      background: #161b22;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+    }
+
+    .window-header {
+      background: #0d1117;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-red {
+      background: #ff5f56;
+    }
+
+    .dot-yellow {
+      background: #ffbd2e;
+    }
+
+    .dot-green {
+      background: #27c93f;
+    }
+
+    .window-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-left: 6px;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .preview-window img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-title h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-highlight);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .steps-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .step-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(233, 84, 32, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(233, 84, 32, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .step-content p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .code-block {
+      background: #06090d;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #38bdf8;
+      overflow-x: auto;
+    }
+
+    .video-card {
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      aspect-ratio: 16 / 9;
+      cursor: pointer;
+    }
+
+    .video-thumbnail-wrap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-thumbnail-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-card:hover .video-thumbnail-wrap img {
+      opacity: 0.88;
+    }
+
+    .play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 68px;
+      height: 68px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 24px rgba(233, 84, 32, 0.7);
+      transition: transform 0.25s ease, background 0.2s ease;
+      cursor: pointer;
+    }
+
+    .play-overlay svg {
+      fill: #fff;
+      margin-left: 4px;
+    }
+
+    .video-card:hover .play-overlay {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: #f06430;
+    }
+
+    .video-iframe-container {
+      width: 100%;
+      height: 100%;
+      display: none;
+      background: #000;
+    }
+
+    .video-iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .video-subtext {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .video-subtext a {
+      color: var(--accent-blue);
+      text-decoration: underline;
+    }
+
+    .table-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.02);
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td code {
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+    }
+
+    .chart-container {
+      max-width: 850px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .chart-container img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-sub);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      nav {
+        height: 56px;
+        gap: 8px;
+      }
+
+      .brand {
+        font-size: 1rem;
+        gap: 8px;
+      }
+
+      .brand-icon {
+        font-size: 1.35rem;
+      }
+
+      .brand-badge {
+        font-size: 0.68rem;
+        padding: 2px 6px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-github-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+      }
+
+      .mobile-quick-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 8px 16px;
+        background: rgba(10, 13, 18, 0.95);
+        border-bottom: 1px solid var(--border-color);
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .mobile-quick-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .mobile-pill {
+        white-space: nowrap;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text-sub);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        padding: 5px 12px;
+        border-radius: 999px;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+      }
+
+      .mobile-pill:active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+
+      .hero {
+        padding: 44px 0 32px;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.85rem, 6.5vw, 2.35rem);
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 1.02rem;
+        margin-bottom: 24px;
+        padding: 0 4px;
+      }
+
+      .pill-announcement {
+        font-size: 0.78rem;
+        padding: 5px 12px;
+        margin-bottom: 18px;
+        white-space: normal;
+        text-align: center;
+      }
+
+      .install-box {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px 14px;
+        margin-bottom: 36px;
+      }
+
+      .install-code {
+        font-size: 0.82rem;
+        padding-bottom: 4px;
+      }
+
+      .copy-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+
+      .window-header {
+        padding: 8px 12px;
+      }
+
+      .window-title {
+        font-size: 0.72rem;
+      }
+
+      .step-item {
+        flex-direction: column;
+        gap: 12px;
+        padding: 18px;
+      }
+
+      .feature-card {
+        padding: 22px;
+      }
+
+      th,
+      td {
+        padding: 12px 14px;
+        font-size: 0.88rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .brand-badge {
+        display: none;
+      }
+
+      .nav-github-btn .nav-btn-text {
+        display: none;
+      }
+
+      .nav-github-btn {
+        padding: 6px 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <nav>
+        <a href="#" class="brand">
+          <span class="brand-icon">🐧</span>
+          <div class="brand-title-wrap">
+            <span class="brand-text">Modded Ubuntu</span>
+            <span class="brand-badge">v2.1.0</span>
+          </div>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#commands">Commands</a></li>
+          <li><a href="#tutorial">Tutorial</a></li>
+        </ul>
+        <a href="https://github.com/modded-ubuntu/modded-ubuntu" target="_blank"
+          class="btn btn-secondary nav-github-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+          </svg>
+          <span class="nav-btn-text">GitHub</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="mobile-quick-nav">
+      <a href="#install" class="mobile-pill">⚡ Install</a>
+      <a href="#features" class="mobile-pill">🌟 Features</a>
+      <a href="#commands" class="mobile-pill">⌨️ Commands</a>
+      <a href="#tutorial" class="mobile-pill">📹 Tutorial</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="pill-announcement">
+        <span>✨ Ubuntu 26.04 LTS Ready • Zero Root Needed</span>
+      </div>
+      <h1>Run Ubuntu Desktop Smoothly on Android</h1>
+      <p>Transform your Android device into a full-blown Linux workstation with Termux and PRoot. Equipped with working audio, browsers, VS Code and sleek themes.</p>
+
+      <div class="hero-actions">
+        <a href="#install" class="btn btn-primary">⚡ Quick Start</a>
+        <a href="https://github.com/modded-ubuntu/modded-ubuntu" target="_blank" class="btn btn-secondary">⭐ Star on
+          GitHub</a>
+      </div>
+
+      <div class="install-box">
+        <div class="install-code" id="cmd-text">pkg update && pkg install git -y && git clone --depth=1 https://github.com/modded-ubuntu/modded-ubuntu.git && cd modded-ubuntu && bash setup.sh</div>
+        <button class="copy-btn" id="copy-btn" onclick="copyCommand()">
+          <span id="copy-icon">📋</span>
+          <span id="copy-label">Copy</span>
+        </button>
+      </div>
+
+      <div class="preview-window">
+        <div class="window-header">
+          <div class="window-dots">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <div class="window-title">xfce4-desktop — localhost:1 (VNC)</div>
+        </div>
+        <img src="./distro/image.jpg" alt="Modded Ubuntu XFCE4 Preview on Android" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Built for Everyday Use</h2>
+        <p>Everything you need for learning Linux and browsing the web.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>No Root Required</h3>
+          <p>Runs 100% in user-space inside Termux. Safe, secure and preserves your device warranty.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <h3>Ubuntu 26.04 LTS</h3>
+          <p>Built upon the latest Ubuntu LTS release for modern packages and long-term security.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔊</div>
+          <h3>Working Sound & Audio</h3>
+          <p>Pre-configured PulseAudio daemon, including tailored fixes for Samsung Galaxy devices.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Working Web Browsers</h3>
+          <p>Chromium and Firefox are pre-patched with container sandbox bypasses so they launch without crashing.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💻</div>
+          <h3>Coding Ready</h3>
+          <p>Bundled with Visual Studio Code (optimized for ARM64) and Sublime Text for coding anywhere.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3>Save Phone Storage</h3>
+          <p>Modular installer lets you pick only the components you need to fit devices with limited space (~4GB).</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Polished Modern Look</h3>
+          <p>Styled with Kora icons, Breeze cursor, tailored XFCE4 panel layouts and native Bangla & Nerd fonts.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Effortless Controls</h3>
+          <p>Launch the CLI anytime by typing <code>ubuntu</code> or run <code>vncstart</code> to fire up your desktop
+            GUI.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="container">
+      <div class="section-title">
+        <h2>Simple 4-Step Installation</h2>
+        <p>Get up and running in just a few minutes using your phone and Termux.</p>
+      </div>
+
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Get Termux</h3>
+            <p>Download Termux from <a href="https://f-droid.org/en/packages/com.termux/" target="_blank">F-Droid</a> or
+              <a href="https://github.com/termux/termux-app/releases/latest" target="_blank">GitHub</a>.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Run Setup Script</h3>
+            <p>Paste the following into Termux and type your chosen lowercase username when prompted:</p>
+            <div class="code-block">yes | pkg up && pkg install git wget -y && git clone --depth=1
+              https://github.com/modded-ubuntu/modded-ubuntu.git && cd modded-ubuntu && bash setup.sh</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Configure Desktop GUI</h3>
+            <p>Restart Termux, run the GUI wizard, and set your VNC password</p>
+            <div class="code-block">ubuntu<br />sudo bash gui.sh</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Connect with VNC Viewer</h3>
+            <p>Open <strong>VNC Viewer</strong>, set address to
+            <div class="code-block">localhost:1</div><br />
+            set Quality to <strong>High</strong> and connect!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tutorial">
+    <div class="container">
+      <div class="section-title">
+        <h2>Video Walkthrough</h2>
+        <p>Click the video below to watch the setup tutorial.</p>
+      </div>
+
+      <div class="video-card" id="video-card" onclick="loadAndPlayVideo()" title="Click to play video">
+        <div class="video-thumbnail-wrap" id="video-thumb">
+          <img src="./distro/image1.jpg" alt="Setup Video Walkthrough" loading="lazy" />
+          <div class="play-overlay" aria-label="Play video">
+            <svg width="28" height="28" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </div>
+        </div>
+        <div class="video-iframe-container" id="video-player"></div>
+      </div>
+      <p class="video-subtext">
+        Having trouble playing? <a href="https://mega.nz/embed/QvIC1TLQ#3z27MRNPwANAg6JTtx1Ei8kDouOZsZgk00bg4TsJMNQ!1m"
+          target="_blank" rel="noopener noreferrer">Open directly in new tab ↗</a>
+      </p>
+    </div>
+  </section>
+
+  <section id="commands">
+    <div class="container">
+      <div class="section-title">
+        <h2>Commands Cheat Sheet</h2>
+        <p>Quick reference commands to control your Ubuntu desktop.</p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Where to Run</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ubuntu</code></td>
+              <td>Termux</td>
+              <td>Starts the Ubuntu CLI session</td>
+            </tr>
+            <tr>
+              <td><code>vncstart</code></td>
+              <td>Ubuntu</td>
+              <td>Starts the TigerVNC desktop server on <code>localhost:1</code></td>
+            </tr>
+            <tr>
+              <td><code>vncstop</code></td>
+              <td>Ubuntu</td>
+              <td>Stops the running VNC desktop server</td>
+            </tr>
+            <tr>
+              <td><code>sudo bash gui.sh</code></td>
+              <td>Ubuntu (root)</td>
+              <td>Reconfigures desktop components & themes</td>
+            </tr>
+            <tr>
+              <td><code>bash remove.sh</code></td>
+              <td>Termux</td>
+              <td>Completely uninstalls Ubuntu and cleans up storage</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="stars">
+    <div class="container">
+      <div class="section-title">
+        <h2>Star History</h2>
+      </div>
+
+      <div class="chart-container">
+        <a href="https://www.star-history.com/?repos=modded-ubuntu%2Fmodded-ubuntu&type=date&legend=top-left"
+          target="_blank" rel="noopener noreferrer">
+          <picture>
+            <source
+              srcset="https://api.star-history.com/chart?repos=modded-ubuntu/modded-ubuntu&type=date&theme=dark&legend=top-left" />
+            <source
+              srcset="https://api.star-history.com/chart?repos=modded-ubuntu/modded-ubuntu&type=date&legend=top-left" />
+            <img alt="Star History Chart"
+              src="https://api.star-history.com/chart?repos=modded-ubuntu/modded-ubuntu&type=date&legend=top-left"
+              loading="lazy" />
+          </picture>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/modded-ubuntu/modded-ubuntu" target="_blank">GitHub Repository</a>
+        <span>•</span>
+        <a href="https://github.com/modded-ubuntu/modded-ubuntu/blob/master/CHANGELOG.md" target="_blank">Changelog</a>
+      </div>
+      <p>Special thanks to the <a href="https://github.com/termux/proot-distro" target="_blank">PRoot-Distro</a> team.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function copyCommand() {
+      const cmd = document.getElementById('cmd-text').innerText;
+      navigator.clipboard.writeText(cmd).then(() => {
+        const btnLabel = document.getElementById('copy-label');
+        const btnIcon = document.getElementById('copy-icon');
+        btnLabel.innerText = 'Copied! ✓';
+        btnIcon.innerText = '';
+        setTimeout(() => {
+          btnLabel.innerText = 'Copy';
+          btnIcon.innerText = '📋';
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy', err);
+      });
+    }
+
+    function loadAndPlayVideo() {
+      const card = document.getElementById('video-card');
+      const thumb = document.getElementById('video-thumb');
+      const player = document.getElementById('video-player');
+
+      if (thumb && player) {
+        thumb.style.display = 'none';
+        player.style.display = 'block';
+        card.onclick = null;
+        card.style.cursor = 'default';
+        player.innerHTML = `
+          <iframe
+            src="https://mega.nz/embed/QvIC1TLQ#3z27MRNPwANAg6JTtx1Ei8kDouOZsZgk00bg4TsJMNQ!1m?autoplay=1"
+            width="100%"
+            height="100%"
+            frameborder="0"
+            allow="autoplay; encrypted-media; fullscreen"
+            allowfullscreen>
+          </iframe>
+        `;
+      }
+    }
+  </script>
+</body>
+
+</html>
