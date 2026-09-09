@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Modded Ubuntu for Termux | Full Linux Desktop on Android</title>
+  <title>Modded Ubuntu for Termux</title>
   <meta name="description"
     content="Run a customized, modern Ubuntu Desktop (XFCE4) on your Android phone using Termux without root. Includes audio fixes, modern browsers, VS Code and sleek themes." />
   <meta name="theme-color" content="#0a0d12" />
@@ -16,7 +16,7 @@
   <meta property="og:title" content="Modded Ubuntu for Termux" />
   <meta property="og:description"
     content="A complete, polished Ubuntu 26.04 GUI desktop environment for Android with fixed audio, browsers and zero root required." />
-  <meta property="og:image" content="./distro/image.jpg" />
+  <link rel="shortcut icon" href="./img/favicon.ico">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -358,6 +358,31 @@
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    .preview-slideshow {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      aspect-ratio: 16 / 8;
+      background: #0d1117;
+    }
+
+    .preview-slideshow img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .preview-slideshow img.active {
+      opacity: 1;
+      transform: scale(1);
+      z-index: 1;
     }
 
     section {
@@ -872,7 +897,15 @@
           </div>
           <div class="window-title">xfce4-desktop — localhost:1 (VNC)</div>
         </div>
-        <img src="https://raw.githubusercontent.com/modded-ubuntu/modded-ubuntu/refs/heads/master/distro/image.jpg" alt="Modded Ubuntu XFCE4 Preview on Android" loading="lazy" />
+        <div class="preview-slideshow" id="preview-slideshow">
+          <img src="./img/1.png" alt="Preview" class="active" loading="lazy" />
+          <img src="./img/7.png" alt="Preview" loading="lazy" />
+          <img src="./img/3.png" alt="Preview" loading="lazy" />
+          <img src="./img/2.png" alt="Preview" loading="lazy" />
+          <img src="./img/4.png" alt="Preview" loading="lazy" />
+          <img src="./img/5.png" alt="Preview" loading="lazy" />
+          <img src="./img/6.png" alt="Preview" loading="lazy" />
+        </div>
       </div>
     </div>
   </section>
@@ -1113,6 +1146,22 @@
         console.error('Failed to copy', err);
       });
     }
+
+    (function () {
+      const slideshow = document.getElementById('preview-slideshow');
+      if (!slideshow) return;
+      const slides = slideshow.querySelectorAll('img');
+      if (slides.length < 2) return;
+
+      let current = 0;
+      const intervalMs = 4000;
+
+      setInterval(() => {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+      }, intervalMs);
+    })();
 
     function loadAndPlayVideo() {
       const card = document.getElementById('video-card');
